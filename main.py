@@ -17,16 +17,31 @@ class Think(Graph):
 		# 		pprint(print(i))
 		# 	print('-------------------------')
 		
+		# init output and feedback to zero
+		for o, f in zip(self.roles.output, self.roles.feedback):
+			o.pack = 0
+			f.pack = 0
+		
 
-	def propagate(self, input_vals:list):
-		input('press key to propagate once') # BFS
+	def propagate(self, input_vals:list): # BFS
+		if input('press key to propagate once') == 'q':
+			SystemExit()
 
 		# get input, set it to input node pack
 		if not len(input_nodes) == len(self.roles.input):
 			raise ValueError(f'Length of input pack list is not correct, should be {len(input_nodes)}, was found to be {len(self.roles.input)}')
 
-		for input_node in self.roles.input:
-			input_node.
+		for input_node, val in zip(self.roles.input, input_vals):
+			input_node.pack = val
+		
+		# process it
+		
+
+
+		
+		# print all config
+		self.print_all()
+
 
 
 if __name__ == '__main__':

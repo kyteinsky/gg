@@ -67,15 +67,17 @@ class Graph:
             'feedback': 'yellow'
         }[for_what]
 
-    def __call__(self, **kwargs):
+    def print_all(self):
+        for i in self.nodes:
+            print(
+                f'Node: {i.id},\trole: {i.role},\tpack: {i.pack},\tedges: {[e.id for e in i.edges]}')
+    
+
+    def __call__(self):
         G = nx.Graph()
         G.add_nodes_from([i.id for i in self.nodes])
         G.add_edges_from(self.edges_init)
         color_map = []
-
-        for i in self.nodes:
-            print(
-                f'Node: {i.id},\trole: {i.role},\tpack: {i.pack},\tedges: {[e.id for e in i.edges]}')
 
         for i in G.nodes:
             color_map.append(self.color_map(self.nodes[i].role))
