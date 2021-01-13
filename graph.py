@@ -56,7 +56,7 @@ class Graph:
     def set_roles(self, ids, role):
         for i in ids:
             self.nodes[i].role = role
-            self.roles.role.append(self.nodes[i])
+            self.roles[role].append(self.nodes[i])
 
     @staticmethod
     def color_map(for_what):
@@ -68,8 +68,13 @@ class Graph:
         }[for_what]
 
     def print_all(self):
-        for i in self.nodes:
-            print(
+        # for i in self.nodes:
+        #     print(
+        #         f'Node: {i.id},\trole: {i.role},\tpack: {i.pack},\tedges: {[e.id for e in i.edges]}')
+        
+        for role in self.roles.values():
+            for i in role:
+                print(
                 f'Node: {i.id},\trole: {i.role},\tpack: {i.pack},\tedges: {[e.id for e in i.edges]}')
     
 
