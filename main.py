@@ -44,18 +44,7 @@ class Mind(Graph):
 		
 		for input_node, val in zip(self.roles.input, self.get_input()):
 			print('INPUT node:',input_node.id)
-			print('val:',val)
-			print('input_node.pack',input_node.pack)
 			input_node.pack += val
-
-			# while input_node.pack > 9: input_node.pack -= 9
-
-			# for edge in input_node.edges:
-			# 	_id_two = edge.ends
-			# 	_id_two.remove(input_node.id)
-			# 	_id_two = _id_two[0]
-
-			# 	_id_two.pack += input_node.pack
 
 		self.think_it_out()
 
@@ -82,21 +71,16 @@ class Mind(Graph):
 
 					self.nodes[_id_two].pack += node.pack
 
-		# for node_set in self.roles.values():
-		# 	if node_set[0].role == 'input': continue
-		# 	print('role:',node_set[0].role)
+		feed_sum = 0
+		for output_node in self.roles.output:
+			# record outputs
+			self.outputs[output_node.id].append(output_node.pack)
+			# sum all output node packs
+			feed_sum += output_node.pack
 
-		# 	for node in node_set:
-		# 		print(f'---node:{node.id}')
-		# 		if node.pack > 9:
-		# 			overflow = node - 9
-		# 			print(f'overflow:{overflow}')
-
-		# 			# update connected nodes
-		# 			for edge in node.edges:
-		# 				print(f'edge:{edge.id}, ends:{edge.ends}')
-		# 				self.nodes[edge.ends[(1,0)[edge.ends[0] == node.id]]].pack += overflow
-		
+		# then add it to all feedback nodes
+		for feedback_node in self.roles.feedback:
+			feedback_node.pack += feed_sum
 
 		self.blocked = False
 
@@ -105,10 +89,8 @@ class Mind(Graph):
 		if not self.blocked:
 			key = input('Enter choice:')
 			if key == '':
-				print('think')
 				self.think_it_out()
 			elif key == 'i':
-				print('take input')
 				self.input_incoming()
 			elif key == 'q':
 				print('\nq pressed, exiting...\n')

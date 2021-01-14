@@ -34,13 +34,23 @@ class Graph:
         self.set_roles(kwargs.inputs, 'input')
         self.set_roles(kwargs.feedbacks, 'feedback')
         self.set_roles(kwargs.outputs, 'output')
-        self.set_roles(list(set(range(kwargs.n_nodes)) - set(kwargs.feedbacks) -
-                            set(kwargs.inputs) - set(kwargs.outputs)), 'gen')
+        self.set_roles(list(
+            set(range(kwargs.n_nodes)) 
+            - set(kwargs.feedbacks) 
+            - set(kwargs.inputs) 
+            - set(kwargs.outputs)
+        ), 'gen')
+
+        self.outputs = dict()
+        # record outputs
+        for output_node in kwargs.outputs:
+            self.outputs[self.nodes[output_node].id] = []
+
 
     def add_edge(self, _id_one, _id_two):
         """
-        First and second terminology holds no significance as such
-        in an undirected graph as this
+        First and second terminology holds no significance 
+        as such in an undirected graph as this
         """
         edge = Edge(self.edge_ord, _id_one, _id_two)
         self.nodes[_id_one].edges.append(edge)
