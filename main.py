@@ -19,13 +19,17 @@ class Mind(Graph):
 		self.index = -1
 		self.blocked = False
 
-		# init output and feedback to zero
-		for i, o, f in zip(self.roles.input, self.roles.output, self.roles.feedback):
-			i.pack, o.pack, f.pack = 0, 0, 0
+		# init input, output and feedback to zero
+		for node_set in self.roles.values():
+			if node_set[0].role == 'gen': continue
+			for node in node_set:
+				node.pack = 0
+		# for i, o, f in zip(self.roles.input, self.roles.output, self.roles.feedback):
+		# 	i.pack, o.pack, f.pack = 0, 0, 0
 		
 		self.print_all()
 
-		
+
 	def get_input(self):
 		self.index += 1
 		if self.index == len(self.input_vals): self.index = 0
@@ -43,7 +47,7 @@ class Mind(Graph):
 			raise ValueError(f'Length of input pack list is not correct, should be {len(input_nodes)}, was found to be {len(self.roles.input)}')
 		
 		for input_node, val in zip(self.roles.input, self.get_input()):
-			print('INPUT node:',input_node.id)
+			# print('INPUT node:',input_node.id)
 			input_node.pack += val
 
 		self.think_it_out()
@@ -59,7 +63,7 @@ class Mind(Graph):
 		"""
 		
 		for node in self.nodes: # self thinking
-			print(f'{node.role} node: {node.id}')
+			# print(f'{node.role} node: {node.id}')
 
 			if node.pack > 9:
 				while node.pack > 9: node.pack -= 9
@@ -106,13 +110,13 @@ class Mind(Graph):
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 
 if __name__ == '__main__':
-	n_nodes = 5
+	n_nodes = 200
 	n_input_nodes = 1
-	n_feedbacks = 1
-	n_outputs = 1
-	# n_input_nodes = max(2, randint(0, int(n_nodes*.2)))
-	# n_feedbacks = max(1, randint(0, int(n_nodes*.1)))
-	# n_outputs = max(1, randint(0, int(n_nodes*.1)))
+	# n_feedbacks = 1
+	# n_outputs = 1
+	n_input_nodes = max(2, randint(0, int(n_nodes*.2)))
+	n_feedbacks = max(1, randint(0, int(n_nodes*.1)))
+	n_outputs = max(1, randint(0, int(n_nodes*.1)))
 
 	combi = list(combinations(range(n_nodes), 2))
 	sampled = sample(combi, randint(int(len(combi)*.5), int(len(combi)*.5)))
@@ -142,8 +146,8 @@ if __name__ == '__main__':
 	# think()
 
 	print(
-		'1. Press Enter to process data''\n'
-		'2. Enter i to take in input''\n'
+		'1. Press Enter to make it think''\n'
+		'2. Enter i to give input''\n'
 		'3. Enter q to exit''\n'
 	)
 
