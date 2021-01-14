@@ -19,6 +19,7 @@ class Graph:
         self.edge_ord = 0
         self.pack = kwargs.pack_init  # function to sample from
         self.edges_init = kwargs.edges_init
+        self.input_vals = kwargs.input_vals
 
         # self.pack_size = pack_size
         # if not self.pack_size: self.pack_size = 4
