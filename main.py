@@ -5,6 +5,8 @@ from random import sample, randint
 import numpy as np
 
 from pynput.keyboard import Key, Listener
+import csv
+from itertools import chain
 
 class Mind(Graph):
 
@@ -26,7 +28,17 @@ class Mind(Graph):
 				node.pack = 0
 		# for i, o, f in zip(self.roles.input, self.roles.output, self.roles.feedback):
 		# 	i.pack, o.pack, f.pack = 0, 0, 0
-		
+
+		self.f = open('dump.csv', 'r+')
+		self.writer = csv.writer(self.f)
+		if self.f.read() == '':
+			writables1 = [(role[0]+'-'+str(len(role[1]))) for role in self.roles.items()]
+			writables2 = list(chain(*[[node.id for node in role] for role in self.roles.values()]))
+			writables1.append('action')
+			writables2.append('action')
+
+			self.writer.writerows([writables1, writables2])
+
 		self.print_all()
 
 
@@ -86,18 +98,25 @@ class Mind(Graph):
 		for feedback_node in self.roles.feedback:
 			feedback_node.pack += feed_sum
 
+		writables2 = list(chain(*[[node.pack for node in role] for role in self.roles.values()]))
+		writables2.append(self.key)
+		print('writables2:',writables2)
+		self.writer.writerow(writables2)
+
 		self.blocked = False
 
 
 	def propagate(self): # BFS
 		if not self.blocked:
-			key = input('Enter choice:')
-			if key == '':
+			self.key = input('Enter choice:')
+			if self.key == '':
+				self.key = 't'
 				self.think_it_out()
-			elif key == 'i':
+			elif self.key == 'i':
 				self.input_incoming()
-			elif key == 'q':
+			elif self.key == 'q':
 				print('\nq pressed, exiting...\n')
+				self.f.close()
 				return False
 
 			# print all config
@@ -107,23 +126,24 @@ class Mind(Graph):
 		else:
 			print('Wait till processing is complete!')
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 
 if __name__ == '__main__':
-	n_nodes = 200
-	n_input_nodes = 1
-	# n_feedbacks = 1
-	# n_outputs = 1
+	n_nodes = 20
 	n_input_nodes = max(2, randint(0, int(n_nodes*.2)))
 	n_feedbacks = max(1, randint(0, int(n_nodes*.1)))
 	n_outputs = max(1, randint(0, int(n_nodes*.1)))
+	n_input_nodes = 1
+	# n_feedbacks = 1
+	# n_outputs = 1
 
 	combi = list(combinations(range(n_nodes), 2))
 	sampled = sample(combi, randint(int(len(combi)*.5), int(len(combi)*.5)))
 
 	# pack_sampler = lambda: list(np.random.randint(0, 9, 255))
 	# pack_sampler = lambda: [randint(0,9)]
-	pack_sampler = lambda: randint(0,9)
+	# pack_sampler = lambda: randint(0,9)
+	pack_sampler = lambda: 0
 	input_nodes = sample(range(n_nodes),
 						 n_input_nodes)
 	feedbacks = sample(list(set(range(n_nodes)) - set(input_nodes)),

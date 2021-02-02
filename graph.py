@@ -86,11 +86,12 @@ class Graph:
         for role in self.roles.values():
             for i in role:
                 print(
-                # f'Node: {i.id},\trole: {i.role},\tpack: {i.pack},\tedges: {[e.id for e in i.edges]}')
-                f'Node: {i.id},''\t'
-                f'role: {i.role},''\t'
-                f'pack: {i.pack},''\t'
-                f'edges: {len(i.edges)}')
+                    # f'Node: {i.id},\trole: {i.role},\tpack: {i.pack},\tedges: {[e.id for e in i.edges]}')
+                    f'Node: {i.id},''\t'
+                    f'role: {i.role},''\t'
+                    f'pack: {i.pack},''\t'
+                    f'n_edges: {len(i.edges)}'
+                )
     
 
     def __call__(self):
