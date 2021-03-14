@@ -1,3 +1,13 @@
+"""
+ISSUES:
+1. exploding of packs
+2. uneven normalization when curbing pack-explosion
+
+PROS:
+1. seems to follow the guided pattern (input)
+"""
+
+
 from graph import Graph, dotdict
 
 from itertools import combinations
@@ -60,7 +70,13 @@ class Mind(Graph):
 		
 		for input_node, val in zip(self.roles.input, self.get_input()):
 			# print('INPUT node:',input_node.id)
-			input_node.pack += val
+			input_node.pack = val
+			for edge in input_node.edges:
+					_id_two = edge.ends.copy()
+					_id_two.remove(input_node.id)
+					_id_two = _id_two[0]
+
+					self.nodes[_id_two].pack += input_node.pack
 
 		self.think_it_out()
 
@@ -79,13 +95,15 @@ class Mind(Graph):
 
 			if node.pack > 9:
 				while node.pack > 9: node.pack -= 9
-
 				for edge in node.edges:
 					_id_two = edge.ends.copy()
 					_id_two.remove(node.id)
 					_id_two = _id_two[0]
 
 					self.nodes[_id_two].pack += node.pack
+
+		for node in self.nodes:
+			while node.pack > 9: node.pack -= 9
 
 		feed_sum = 0
 		for output_node in self.roles.output:
@@ -109,10 +127,11 @@ class Mind(Graph):
 	def propagate(self): # BFS
 		if not self.blocked:
 			self.key = input('Enter choice:')
-			if self.key == '':
+			if self.key == 't':
 				self.key = 't'
 				self.think_it_out()
-			elif self.key == 'i':
+			elif self.key == '':
+				self.key = 'i'
 				self.input_incoming()
 			elif self.key == 'q':
 				print('\nq pressed, exiting...\n')

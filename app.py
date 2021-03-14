@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import re
+import numpy as np
 
 '# App to analyse working of'
 '# *The Mind*'
@@ -26,5 +27,11 @@ for i in range(len(first_row)):
 del summ, roles
 
 for i in dfs.items():
-	'##',i[0]
-	st.line_chart(i[1])
+	if not i[0] == 'gen':
+		'##',i[0]
+		st.line_chart(i[1])
+	else:
+		'##',i[0]
+		tmp = np.transpose(i[1])
+		for j in tmp:
+			st.line_chart(j)
