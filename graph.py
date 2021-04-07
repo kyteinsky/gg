@@ -4,7 +4,7 @@ from random import sample, randint
 import networkx as nx
 import matplotlib.pyplot as plt
 
-
+# Basic Graph Backbone consisting of nodes and edges
 class Graph:
 
 	def __init__(self, kwargs):
@@ -15,11 +15,11 @@ class Graph:
 			'feedback': [],
 		})  # storage for all nodes, classified
 
-		self.nodes = []
-		self.edge_ord = 0
+		self.nodes = [] # for all node objects
+		self.edge_ord = 0 # node ordinal
 		self.pack = kwargs.pack_init  # function to sample from
-		self.edges_init = kwargs.edges_init
-		self.input_vals = kwargs.input_vals
+		self.edges_init = kwargs.edges_init # node pairs
+		self.input_vals = kwargs.input_vals # input sequence, just for testing
 
 		# self.pack_size = pack_size
 		# if not self.pack_size: self.pack_size = 4
