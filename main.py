@@ -12,9 +12,9 @@ from graph import Graph, dotdict
 
 from itertools import combinations
 from random import sample, randint
-import numpy as np
+# import numpy as np
 
-from pynput.keyboard import Key, Listener
+# from pynput.keyboard import Key, Listener
 import csv
 from itertools import chain
 
@@ -39,7 +39,7 @@ class Mind(Graph):
 		# for i, o, f in zip(self.roles.input, self.roles.output, self.roles.feedback):
 		# 	i.pack, o.pack, f.pack = 0, 0, 0
 
-		self.f = open('dump.csv', 'r+')
+		self.f = open('oth/dump.csv', 'r+')
 		self.writer = csv.writer(self.f)
 		if self.f.read() == '':
 			writables1 = [(role[0]+'-'+str(len(role[1]))) for role in self.roles.items()]
